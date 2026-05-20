@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech — {{ book.title }}{% endblock %}
+
+{% block body %}
+<div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
+    <h1>📖 {{ book.title }}</h1>
+    <p><strong>Auteur :</strong> {{ book.author.firstName }}:{{book.author.lastName}}</p>
+    <p><strong>Description :</strong> {{ book.description|default('Aucune description disponible.') }}</p>
+    {# <p><strong>Catégories :</strong> {{ book.categories.name }}</p> #}
+    <p>nombre de categories {{book.categories|length}} </p>
+            {% if book.categories|length > 0 %}
+               {% for categorie in book.categories %}
+                  <p>Catégorie du livre {{ categorie.name}} </p>
+                  {% endfor %}
+              {% endif %}    
+    <p><em>ID du livre : {{ book.id }}</em></p>
+
+   
+    <a href="{{ path('app_book_index') }}">⬅️ Retour à la liste</a>
+</div>
+{% endblock %}
