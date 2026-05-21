@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Auteur;
 use App\Entity\Book;
 use App\Entity\Category;
+use App\Form\BookType;
 use App\Repository\AuteurRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,10 +16,32 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use App\Repository\CategoryRepository;
 use App\Repository\BookRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 final class BookController extends AbstractController
 {
 
+
+
+    #[Route('/livres/nouveau',name:'app_book_new',methods:['GET','POST'])]
+    
+     public function new (Request $request ,EntityManagerInterface $em)
+     {
+        $book = new Book();
+        $form = $this->createForm(BookType::class,$book);
+        $form ->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()){
+                $em->persist($book);
+                $em->flush();
+                 $this->addFlash('success', 'Le livre "' . $book->getTitle() . '" a été ajouté avec succès !');
+        return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+            }
+           
+    return $this->render('book/new.html.twig', [
+        'form' => $form,
+    ]); 
+     }   
+    
     #[Route('/livre/titre/{titre}',name:'app_book_show_by_title')]
     public function getNameBook(BookRepository $bookRepository ,string $titre)
     {
