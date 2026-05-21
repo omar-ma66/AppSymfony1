@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %} livre par auteur {% endblock %}
+
+{% block stylesheet %} 
+
+{% endblock %}
+
+{% block body %}
+                    {% dump ( books) %}
+                    <a href="{{ path('app_book_index') }}">← Retour à la liste</a>
+  
+                <p> {{ books|length}} livre(s) trouvé(s)  </p>
+<ul>
+                    {% for book in books %}
+
+                        <li> {{ book.title}}  ecris par {{ book.author.firstName}}: {{ book.author.lastName }}
+                         <a href="{{ path('app_book_show', {id: book.id}) }}"> {{ book.title}}</a>
+                        </li>
+                    {% else %}
+                      <p> pas de livre </p>    
+                    {% endfor %}
+{% endblock %}

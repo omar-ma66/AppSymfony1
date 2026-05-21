@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Entity\Category;
+use App\Entity\Auteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +42,37 @@ class BookRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByCategory(Category $category):array
+    {
+        return $this->createQueryBuilder('b')
+                    ->join('b.categories','c')
+                    ->andWhere('c = :category')
+                    ->setParameter('category',$category)
+                    ->orderBy('b.title','ASC')
+                    ->getQuery()
+                    ->getResult();
+    }
+    public function findByStock(int $nb):array
+    {
+       return $this->createQueryBuilder('b')
+             ->andWhere("b.stock >  :nb ")
+             ->setParameter("nb",$nb)
+             ->orderBy('b.title','ASC')
+             ->getQuery()
+             ->getResult();
+    }
+
+    public function findByAuteur(Auteur $auteur):array
+    {
+           return     $this->createQueryBuilder('b')
+                     ->andWhere('b.author = :author')
+                    ->setParameter('author',$auteur)
+                    ->orderBy('b.title','ASC')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    
+
 }

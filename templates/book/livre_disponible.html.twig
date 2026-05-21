@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Livres disponibles {% endblock %}
+
+  {% dump( books) %}
+
+      {% block stylesheet %}
+
+      {% endblock %}
+
+
+
+{% block body %}
+
+<p> Voici no livres disponibles </p>
+<ul>
+      {% for book in books %}
+
+        <li> {{ book. title}} : de {{ book.author.firstName}},{{ book.author.lastName}} </li>
+      {% else %}
+        <p> pas de livre disponible </p>  
+    {% endfor %}
+
+{% endblock %}

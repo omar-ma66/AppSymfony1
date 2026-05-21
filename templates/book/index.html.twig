@@ -3,6 +3,27 @@
 {% block title %}Bibliotech — Nos livres{% endblock %}
 
 {% block body %}
+
+    {# {% if category|length > 0  %} #}
+       <p> Nos différente catégorie </p>
+       <ul>
+         {% for categorie in categories %}
+
+                <li> 
+                {{ categorie.name }} 
+                
+                    <a href="{{  path('app_book_by_category',{ id: categorie.id }) }}">{{categorie.name}} </a>
+                 </li>
+
+
+            {% else %}
+             <p> il n'y a pas de categorie </p>
+        {% endfor %}  
+        </ul>   
+
+
+
+
 <div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
     <h1>📚 Nos livres</h1>
     <p>Nombre de livres : {{ books|length }}</p>

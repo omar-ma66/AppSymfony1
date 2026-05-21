@@ -54,7 +54,8 @@ class Book
 
     public function setTitle(string $title): static
     {
-        $this->title = $title;
+        $this->title = $title
+        ;
 
         return $this;
     }

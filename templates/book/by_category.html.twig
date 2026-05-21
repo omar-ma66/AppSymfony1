@@ -1,0 +1,33 @@
+ {% extends "base.html.twig" %}
+ {% dump( category ) %}
+ {% dump( books ) %}
+ {%  block title %}  {{ category.name }} {% endblock %}
+{% block stylesheet %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+<a href="{{ path('app_book_index')}}"> retour à la liste </a>
+
+<h1> Livre de la catégorie {{ category.name }} </h1>
+
+<p> {{ books | length }} livre(s)  trouvé(s) </p>
+
+<ul>
+
+        {% for book in books %}
+            <li>
+                <a href=" {{ path('app_book_show' ,{ id: book.id })  }}" >
+                        <strong> {{ book.title }} </strong>
+                 </a>
+                {{book.author.firstName }} {{ book.author.lastName}}
+            </li>
+            {% else %}
+             <li> aucun livre dans cette categorie</li>
+
+             {% endfor %}
+             </ul>
+{% endblock %}
