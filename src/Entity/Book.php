@@ -7,7 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Mime\Message;
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
@@ -16,16 +17,29 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide.')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le titre doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\Positive]
     private ?int $stock = null;
 
     #[ORM\Column(length: 13, nullable: true)]
+    #[Assert\Length(
+        min:13,
+        max:13
+    )]
     private ?string $isbn = null;
 
     #[ORM\ManyToOne(inversedBy: 'books')]

@@ -1,0 +1,44 @@
+{%  extends "base.html.twig"  %}
+{% block title%} Bibliotech - Nouveau livre {% endblock %}
+{% block stylesheets%}
+    <style>
+.ma-class-test{
+    width:24vw;
+}
+    </style>
+{% endblock %}
+{% block body %}
+            <a href=" {{ path('app_book_index') }}"> -- Retour a la liste  </a>
+
+            <h1> + Ajouter un livre </h1>
+
+
+{{ form_start(form) }}
+
+<p>
+     {{ form_label(form.title)}}
+     </p>
+     <p>
+     {{ form_widget(form.title)}}</p>
+
+  <p>
+    {{ form_label(form.description)}}</p>
+    <p>
+    {{ form_widget(form.description)}}</p>
+
+  
+
+    
+       <p> {{ form_label(form.stock) }}</p>
+       <p> {{ form_widget(form.stock) }}</p>
+   
+
+    <p>{{ form_label(form.author) }}</p>
+    <p>{{ form_widget(form.author) }}</p>
+    {{ form_row(form.categories) }}
+
+   
+{{ form_end(form) }}
+ 
+
+{% endblock %}

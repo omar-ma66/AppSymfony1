@@ -5,11 +5,12 @@ namespace App\Form;
 use App\Entity\Auteur;
 use App\Entity\Book;
 use App\Entity\Category;
-use Doctrine\DBAL\Types\IntegerType;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,21 +21,26 @@ class BookType extends AbstractType
         $builder
             ->add('title',TextType::class,[
                 'label' => 'Titre',
-                'attr' => ['placeholder' => 'Ex: Dune'],
+                'attr' => ['placeholder' => 'Ex: Dune','size'=> 60,'style'=>'padding:8px;'],
             ])
             ->add('description',TextareaType::class,[
                 'label' => 'Description',
                 'required' => false,
-                'attr' => ['rows'=> 5 ,'placeholder' => 'Résumé du livre...']
+                'attr' => ['rows'=> 10 ,'cols'=> 60,'placeholder' => 'Résumé du livre...']
             ])
             ->add('stock',IntegerType::class,[
                 'label'=>'Stock',
-                'attr'=>['min',0],
-            ])
-            ->add('isbn',TextType::class,[
-                'label'=>'isbn du livre'
+                'attr'=>['min' => 0,'class'=>'ma-class-test','style'=>'padding:8px']
             ])
 
+            // ->add('isbn',TextType::class,[
+            //     'label'=>'Code isbn du livre',
+            // ])
+            ->add('isbn', TextType::class, [
+                 'label'    => 'ISBN',
+                'required' => false,
+                'attr'     => ['placeholder' => 'Ex: 9782070360024'],
+])
             ->add('author', EntityType::class, [
                 'class' => Auteur::class,
                 'choice_label' => function (Auteur $author):string
@@ -47,11 +53,19 @@ class BookType extends AbstractType
 
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => function(Category $category):string{
+                    return $category->getName();
+                },
+                // 'choice_label' => 'id',
                 'multiple' => true,
                 'expanded' => true,
-                'labe'     => 'Catégories',
+                'label'     => 'Catégories',
                 'required' => 'false'
+            ])
+            ->add('Envoyer',SubmitType::class,
+            [
+                'label'=>'Enregistrer le livre',
+                'attr'=>[ 'style' => 'padding:8px ; background:#00F; color:#FFF;']
             ])
         ;
     }

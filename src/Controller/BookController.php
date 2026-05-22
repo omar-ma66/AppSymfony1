@@ -21,10 +21,33 @@ use Symfony\Component\HttpFoundation\Request;
 final class BookController extends AbstractController
 {
 
+    #[Route('/liste/livre',name:'app_liste_livre')]
+    public function cherche(Request $request,  BookRepository $bookRepository , CategoryRepository $categoryRepository):Response
+    {
+              $search =  $request->query->get('q','');
+
+                        if ($search !== '') {
+                            $books = $bookRepository->findByTitleLike($search);
+                        } else {
+                            $books = $bookRepository->findAll();
+                        }
+                        
+                    $categories = $categoryRepository->findAll();
+                  
+    return $this->render('book/index.html.twig', [
+        'books'      => $books,
+        'categories' => $categories,
+        'search'     => $search,
+    ]);
+
+            return  new Response("la route repond bien");
+    }
+
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
 
 
     #[Route('/livres/nouveau',name:'app_book_new',methods:['GET','POST'])]
-    
      public function new (Request $request ,EntityManagerInterface $em)
      {
         $book = new Book();
@@ -33,15 +56,17 @@ final class BookController extends AbstractController
             if($form->isSubmitted() && $form->isValid()){
                 $em->persist($book);
                 $em->flush();
-                 $this->addFlash('success', 'Le livre "' . $book->getTitle() . '" a été ajouté avec succès !');
+                 $this->addFlash('success', 'Le livre ' . $book->getTitle() . ' a été ajouté avec succès !');
         return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
             }
            
     return $this->render('book/new.html.twig', [
-        'form' => $form,
+        'form' => $form
     ]); 
      }   
-    
+
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */ 
     #[Route('/livre/titre/{titre}',name:'app_book_show_by_title')]
     public function getNameBook(BookRepository $bookRepository ,string $titre)
     {
@@ -55,8 +80,8 @@ final class BookController extends AbstractController
              return   $this->redirectToRoute('app_book_show',['id' => $book->getId()]);
 
     }
-
-
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
     #[Route('/auteur/{id}/livres',name:'app_auteur_livre',requirements:['id'=>'\d+'])]
     public function findByAuteur(BookRepository $bookRepository,AuteurRepository $auteurRepository, int $id)
     {
@@ -71,14 +96,16 @@ final class BookController extends AbstractController
                 return $this->render('book/auteur_livre.html.twig',['books'=> $books]);
 
     }
-
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
     #[Route('/livre/disponibles/{nb}',name:'app_livre_disponible',requirements:['nb'=>'\d+'] )]
     public function findAvailable(BookRepository $bookRepository,int $nb)
     {
         $books = $bookRepository->findByStock($nb) ;  
    return $this->render('book/livre_disponible.html.twig',["books"=>$books]);     
     }
-
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
 
     #[Route('/categorie/{id}/livre', name: 'app_book_by_category', requirements: ['id' => '\d+'])]
     // #[Route('/categorie/{id}/livres', name: 'app_book_by_category', requirements: ['id' => '\d+'])]
@@ -94,13 +121,14 @@ final class BookController extends AbstractController
         return $this->render('book/by_category.html.twig', ['category' => $category, 'books' => $books]);
      
     }
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
+    #[route('/categorie/{category}/livre/{id}', name: 'app_book_by_category_2', requirements: ['id' => '\d+'])]
+    public function showByCategory(string $category, int $id): Response
+    {
 
-    // #[route('/categorie/{category}/livre/{id}', name: 'app_book_by_category', requirements: ['id' => '\d+'])]
-    // public function showByCategory(string $category, int $id): Response
-    // {
-
-    //     return  new Response("vous avez choisi le livre [ $id ] de  la categorie : [$category ] : ");
-    // }
+        return  new Response("vous avez choisi le livre [ $id ] de  la categorie : [$category ] : ");
+    }
 
     #[Route('/livre/ajouter', name: 'app_add_book')]
     public function addBook(EntityManagerInterface $em, CategoryRepository $cr): Response
@@ -148,7 +176,8 @@ final class BookController extends AbstractController
 
         return new Response("les deux livres sont enregistrés");
     }
-
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
     #[Route('/livres/init', name: 'app_book_init')]
     public function init(EntityManagerInterface $em): Response
     {
@@ -218,21 +247,23 @@ final class BookController extends AbstractController
 
         return new Response('✅ Données de test insérées avec succès !');
     }
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
+    // #[Route('/livres', name: 'app_book_index')]
+    // public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
+    // {
 
-    #[Route('/livres', name: 'app_book_index')]
-    public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
-    {
+    //     $books = $bookRepository->findAll();
+    //     $categories = $categoryRepository->findAll();
 
-        $books = $bookRepository->findAll();
-        $categories = $categoryRepository->findAll();
-
-        // $availableCount = count(array_filter($books, fn($book) => $book['available']));
-        return $this->render('book/index.html.twig', [
-            'books' => $books,
-            'categories'=>$categories
-        ]);
-    }
-
+    //     // $availableCount = count(array_filter($books, fn($book) => $book['available']));
+    //     return $this->render('book/index.html.twig', [
+    //         'books' => $books,
+    //         'categories'=>$categories
+    //     ]);
+    // }
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
     #[Route('/livre/{id}', name: 'app_book_show', requirements: ['id' => '\d+'])]
     public function show(BookRepository $bookRepository, int $id): Response
     {
@@ -244,11 +275,14 @@ final class BookController extends AbstractController
 
         return $this->render('book/show.html.twig', ["book" => $book]);
     }
-
-    #[route('/auteur/{name}', name: 'app_author_show')]
-    public function showAuthor(string $name): Response
-    {
-        return new Response("Page de l'auteur : $name");
-    }
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
+    // #[route('/auteur/{name}', name: 'app_author_show')]
+    // public function showAuthor(string $name): Response
+    // {
+    //     return new Response("Page de l'auteur : $name");
+    // }
 
 }
+/******************************************************************************************************************************************** */
+/******************************************************************************************************************************************** */
