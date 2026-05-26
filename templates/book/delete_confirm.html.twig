@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Delete Confirmation {{ book.title }}  {% endblock %}
+
+{% block body %}
+
+<h1> Supprimer un livre </h1>
+
+            <form method='POST' action="{{ path('app_book_delete',{id: book.id}) }}">
+                    <input type='hidden' name="_token" value="{{ csrf_token ('delete-book-' ~ book.id ) }}">
+                    <button type="submit">OUI</button>
+           
+            </form>
+
+            <form method='POST' action="{{ path('app_book_show',{id: book.id}) }}">
+                    <input type='hidden' name="_token" value="{{ csrf_token ('delete-book-' ~ book.id ) }}">           
+                    <button type="submit" >NON </button>
+            </form>
+
+
+{% endblock %}

@@ -5,7 +5,11 @@
 {% block body %}
 <div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
     <h1>📖 {{ book.title }}</h1>
-    <p><strong>Auteur :</strong> {{ book.author.firstName }}:{{book.author.lastName}}</p>
+    {# <p><strong>Auteur :</strong> {{ book.author.firstName }}:{{book.author.lastName}}</p> #}
+    <p><strong> Auteur :</strong>
+    <a href="{{ path('app_auteur_show',{id : book.author.id}) }}"> {{ book.author.firstName }} {{ book.author.lastName }} </a>
+
+
     <p><strong>Description :</strong> {{ book.description|default('Aucune description disponible.') }}</p>
     {# <p><strong>Catégories :</strong> {{ book.categories.name }}</p> #}
     <p>nombre de categories {{book.categories|length}} </p>
@@ -18,7 +22,42 @@
 
    
     <a href="{{ path('app_book_index') }}">⬅️ Retour à la liste</a>
-</div>
+
+
+
+<hr>
+    <div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
+        <a href="{{ path('app_book_edit', {id: book.id}) }}">
+            ✏️ Modifier ce livre
+        </a>
+           {# <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
+              style="display: inline;"
+              onsubmit="return confirm('Es-tu sûr de vouloir supprimer « {{ book.title }} » ? Cette action est irréversible.')">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
+            <button type="submit">🗑️ Supprimer</button>
+        </form> #}
+
+<a href="{{ path('app_book_delete_confirm', {id: book.id}) }}">🗑️ Supprimer</a>
+
+    </div>
+
+
+{# ##########################################################################################################################################" #}
+
+<form method="POST" action="{{ path('app_book_stock_update', {id: book.id}) }}" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('stock-update-' ~ book.id) }}">
+    <input type="hidden" name="action" value="increment">
+    <button type="submit">➕</button>
+</form>
+
+<form method="POST" action="{{ path('app_book_stock_update', {id: book.id}) }}" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('stock-update-' ~ book.id) }}">
+    <input type="hidden" name="action" value="decrement">
+    <button type="submit">➖</button>
+</form>
+
+{# ##########################################################################################################################################" #}
+
 
 
 {% endblock %}

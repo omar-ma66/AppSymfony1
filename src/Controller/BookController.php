@@ -16,10 +16,112 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use App\Repository\CategoryRepository;
 use App\Repository\BookRepository;
+use Symfony\Component\CssSelector\Node\MatchingNode;
 use Symfony\Component\HttpFoundation\Request;
 
 final class BookController extends AbstractController
 {
+
+
+#[Route('livre/{id}/supprimer/confirmer',name:'app_book_delete_confirm',requirements:['id'=>'\d+'],methods:['GET'])]
+public function confirmDelete(Book $book,Request $request , EntityManagerInterface $em)
+{
+            if(!$book)
+                {
+                    throw $this->createNotFoundException("Le Livre est introuvable.");
+                }
+
+            return $this->render('book/delete_confirm.html.twig',['book' => $book]);
+}
+
+#[Route('/livre/{id}/stock',name: 'app_book_stock_update',requirements:['id'=>'\d+'] ,methods:['POST'])]
+public function bookUpdate(Request $request , Book $book ,EntityManagerInterface $em)
+{
+            if( !$book)
+                {
+                    throw $this->createAccessDeniedException('le livre n\'a pas été trouvé. ');
+                }    
+            if($this->isCsrfTokenValid('stock-update-'.$book->getId(),$request->request->get('_token'))){
+                        if($request->request->get('action') === "increment")
+                            {
+                               $stock =         $book->getStock();
+                               $stock++;
+                                              $book->setStock($stock);  
+                                              $em->flush();
+                         $this->addFlash('success','le stock a bien été incrementé '.$book->getStock());
+                            }
+                        elseif($request->request->get('action') === "decrement")    
+                            {
+                                   $stock =         $book->getStock();
+                                   if( $stock > 0)
+                                      $stock--   ;
+                                    $book->setStock($stock);
+                                              $em->flush();
+                         $this->addFlash('success','le stock a bien été incrementé '.$book->getStock());
+                            }  
+                            return   $this->redirectToRoute('app_book_show',['id'=> $book->getId() ]);                
+                }
+              else{
+                        $this->addFlash('error','Le jeton securité est invalide!');
+                         return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+                    }  
+  
+}
+
+
+
+#[Route('/livre/{id}/supprimer',name:'app_book_delete',requirements:['id'=>'\d+'],methods:['GET','POST'])]
+public function delete(Book $book , EntityManagerInterface $em ,Request $request)
+{
+     if(!$book)
+        {
+            throw $this->createNotFoundException('Le livre est introuvable .');
+        }
+
+        if($this->isCsrfTokenValid('delete-book-'.$book->getId(),$request->request->get('_token')))
+            {
+                $title = $book->getTitle() ;
+                $em->remove($book);
+                $em->flush();
+
+                $this->addFlash('success','Le livre '. $title.' a bien été supprimé. ');
+            }
+        else
+            {
+                $this->addFlash('error','Jeton de securité invalide , la suppression a été annulée.');
+            }    
+
+            return  $this->redirectToRoute('app_book_index');
+}
+
+
+
+#[Route('/livre/{id}/modifier',name:'app_book_edit',requirements:['id'=>'\d+'],methods:['GET','POST'])]
+public function edit(Book $book,Request $request,EntityManagerInterface $em):Response
+{
+
+ if( !$book )
+    {
+        throw $this->createNotFoundException("Le livre est introuvable.");
+    }
+
+        $form = $this->createForm(BookType::class,$book);
+        $form ->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+            {
+                $em->flush();
+                $this->addFlash('success','Le Livre '.$book->getTitle().' a été modiffié avec succès !');
+                return $this->redirectToRoute('app_book_show',['id'=> $book->getId()]);
+            }
+       
+            return $this->render('book/edit.html.twig',['form' => $form ,'book'=> $book]);     
+
+}
+
+
+
+
 
     #[Route('/liste/livre',name:'app_liste_livre')]
     public function cherche(Request $request,  BookRepository $bookRepository , CategoryRepository $categoryRepository):Response
@@ -249,19 +351,19 @@ final class BookController extends AbstractController
     }
 /******************************************************************************************************************************************** */
 /******************************************************************************************************************************************** */
-    // #[Route('/livres', name: 'app_book_index')]
-    // public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
-    // {
+    #[Route('/livres', name: 'app_book_index')]
+    public function index(BookRepository $bookRepository,CategoryRepository $categoryRepository): Response
+    {
 
-    //     $books = $bookRepository->findAll();
-    //     $categories = $categoryRepository->findAll();
+        $books = $bookRepository->findAll();
+        $categories = $categoryRepository->findAll();
 
-    //     // $availableCount = count(array_filter($books, fn($book) => $book['available']));
-    //     return $this->render('book/index.html.twig', [
-    //         'books' => $books,
-    //         'categories'=>$categories
-    //     ]);
-    // }
+        // $availableCount = count(array_filter($books, fn($book) => $book['available']));
+        return $this->render('book/index.html.twig', [
+            'books' => $books,
+            'categories'=>$categories
+        ]);
+    }
 /******************************************************************************************************************************************** */
 /******************************************************************************************************************************************** */
     #[Route('/livre/{id}', name: 'app_book_show', requirements: ['id' => '\d+'])]
