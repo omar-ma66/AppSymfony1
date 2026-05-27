@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{# <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
@@ -6,15 +6,18 @@
         <title>{% block title %}Bibliotech{% endblock %}</title>
 
         {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset(' styles/app.css' ) }}">
         {% endblock %}
+
+        
     </head>
     <body>
         {% include '_partials/_header.html.twig' %}
 
-        <main style="padding: 30px; max-width: 960px; margin: 0 auto;">
+        <main style="padding: 30px; max-width: 960px; margin: 0 auto;"> #}
         
     {# Affichage des messages flash #}
-    {% for type, messages in app.flashes %}
+    {# {% for type, messages in app.flashes %}
         {% for message in messages %}
             <div style="
                 padding: 12px 20px;
@@ -34,5 +37,45 @@
         {% include '_partials/_footer.html.twig' %}
         {% block javascripts %}
         {% endblock %}
+    </body>
+</html> #}
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-gray-50">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Bibliotech{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+        {% endblock %}
+    </head>
+    <body class="flex flex-col min-h-screen text-gray-800">
+
+        {% include '_partials/_header.html.twig' %}
+
+        <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
+
+            {# Messages flash #}
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="mb-4 px-4 py-3 rounded-lg border
+                        {% if type == 'success' %}bg-green-50 text-green-800 border-green-300
+                        {% elseif type == 'error' %}bg-red-50 text-red-800 border-red-300
+                        {% else %}bg-yellow-50 text-yellow-800 border-yellow-300{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+
+        {% include '_partials/_footer.html.twig' %}
+
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

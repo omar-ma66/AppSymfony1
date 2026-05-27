@@ -1,0 +1,15 @@
+{%  extends "base.html.twig" %}
+
+{% block title %} Bibliotech - Modifier " {{ book.title }} " {% endblock %}
+
+{%  block body %}
+
+
+            <a href=" {{ path( 'app_book_show' , {id: book.id }) }}" > -- Retour au livre </a>
+
+            <h1> Modifier : {{ book.title }} </h1>
+
+
+            {{ form ( form ) }}
+
+{%  endblock %}

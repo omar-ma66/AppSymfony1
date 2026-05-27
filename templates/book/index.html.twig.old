@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliotech — Nos livres{% endblock %}
+
+{% block body %}
+
+<form method="GET" action="{{ path('app_liste_livre') }}">
+  <input
+    type="text"
+    name="q"
+    value="{{ app.request.query.get('q') }}"
+    placeholder="Rechercher un livre…"
+  />
+  <button type="submit">🔍</button>
+</form>
+
+{# #################################################################################################################" #}
+    {# {% if category|length > 0  %} #}
+       <p> Nos différente catégorie </p>
+       <ul>
+         {% for categorie in categories %}
+
+                <li> 
+                {{ categorie.name }} 
+                
+                    <a href="{{  path('app_book_by_category',{ id: categorie.id }) }}">{{categorie.name}} </a>
+                 </li>
+
+
+            {% else %}
+             <p> il n'y a pas de categorie </p>
+        {% endfor %}  
+        </ul>   
+{# #################################################################################################################" #}
+<div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
+    <h1>📚 Nos livres</h1>
+    <p>Nombre de livres : {{ books|length }}</p>
+    {# <p>{{ availableCount }} livre(s) disponible(s) sur {{ books|length }}</p> #}
+    {% if books|length > 0 %}
+      
+           {% for book in books %}
+              {% include '_partials/_book_card.html.twig' with {book : book , index : book.id} %}
+
+         {% endfor %}
+    {# <li>
+                <a href= "{{path('app_book_show',{'id':loop.index}) }}"> <strong>{{book.title}} </strong></a>
+    </li> #}
+    {% else %}
+    <p> Pas de livre disponible </p>
+    {% endif %}  
+</div>
+{# #################################################################################################################" #}
+{% for book in books %}
+    <li>
+        <a href="{{ path('app_book_show', {id: book.id}) }}">
+            <strong>{{ book.title }}</strong>
+        </a>
+        {# — {{ book.author.firstName }} {{ book.author.lastName }} #}
+        — <a href="{{ path('app_auteur_show', {id: book.author.id}) }}">
+            {{ book.author.firstName }} {{ book.author.lastName }}
+         </a>
+        (stock : {{ book.stock }})
+        | <a href="{{ path('app_book_edit', {id: book.id}) }}">✏️ Modifier</a>
+
+          <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
+              style="display: inline;"
+              onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
+            <button type="submit">🗑️</button>
+        </form>
+
+        {# <form method="POST" action="{{ path('app_book_delete_confirm', {id: book.id}) }}"
+              style="display: inline;"
+              onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
+            <button type="submit">🗑️</button>
+        </form> #}
+
+    </li>
+{% endfor %}
+{# #################################################################################################################" #}
+
+{% endblock %}

@@ -62,11 +62,11 @@ class BookType extends AbstractType
                 'label'     => 'Catégories',
                 'required' => 'false'
             ])
-            ->add('Envoyer',SubmitType::class,
-            [
-                'label'=>'Enregistrer le livre',
-                'attr'=>[ 'style' => 'padding:8px ; background:#00F; color:#FFF;']
-            ])
+            // ->add('Envoyer',SubmitType::class,
+            // [
+            //     'label'=>'Enregistrer le livre',
+            //     'attr'=>[ 'style' => 'padding:8px ; background:#00F; color:#FFF;']
+            // ])
         ;
     }
 
