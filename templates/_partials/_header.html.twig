@@ -57,12 +57,12 @@
 {% elseif is_granted('ROLE_LIBRARIAN') %}
     <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded">Libraire</span>
 {% endif %}
-    <a href="#"
+    <a href="{{ path('app_logout')}}"
        class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition">
         Déconnexion
     </a>
 {% else %}
-    <a href="#"
+    <a href="{{ path('app_login')}}"
        class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition">
         🔑 Connexion
     </a>
