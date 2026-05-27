@@ -10,7 +10,7 @@
         <h1 class="text-3xl font-bold text-gray-800 mb-2">📖 {{ book.title }}</h1>
 
         <p class="text-gray-600 mb-4">
-            ✍️ <a href="{{ path('app_author_show', {id: book.author.id}) }}"
+            ✍️ <a href="{{ path('app_auteur_show', {id: book.author.id}) }}"
                   class="text-indigo-600 hover:underline font-medium">
                 {{ book.author.firstName }} {{ book.author.lastName }}
             </a>
@@ -43,6 +43,7 @@
             </div>
         {% endif %}
 
+    {% if is_granted('ROLE_ADMIN') %}
         <div class="flex gap-4 mt-6 border-t pt-4">
             <a href="{{ path('app_book_edit', {id: book.id}) }}"
                class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
@@ -57,5 +58,7 @@
                 </button>
             </form>
         </div>
+    {% endif %}
+
     </div>
 {% endblock %}

@@ -46,6 +46,27 @@
                class="bg-white text-indigo-800 hover:bg-indigo-100 font-semibold px-3 py-1 rounded transition">
                 ➕ Ajouter
             </a>
+
+            {# Dans le nav de _header.html.twig, ajoute à la fin : #}
+{% if app.user %}
+    <span class="text-indigo-200 text-sm">
+        👤 {{ app.user.firstName ?? app.user.email }} 
+    </span>
+ {% if is_granted('ROLE_ADMIN') %}
+    <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-0.5 rounded">Admin</span>
+{% elseif is_granted('ROLE_LIBRARIAN') %}
+    <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded">Libraire</span>
+{% endif %}
+    <a href="#"
+       class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded transition">
+        Déconnexion
+    </a>
+{% else %}
+    <a href="#"
+       class="bg-white text-indigo-800 hover:bg-indigo-100 text-sm font-semibold px-3 py-1 rounded transition">
+        🔑 Connexion
+    </a>
+{% endif %}
         </nav>
     </div>
 </header>

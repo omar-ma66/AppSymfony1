@@ -63,6 +63,9 @@
                         </span>
                     </p>
                 </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+            
                 <div class="flex items-center gap-3 text-sm">
                     <a href="{{ path('app_book_edit', {id: book.id}) }}"
                        class="text-indigo-600 hover:underline">✏️ Modifier</a>
@@ -72,6 +75,7 @@
                         <button type="submit" class="text-red-500 hover:underline cursor-pointer">🗑️</button>
                     </form>
                 </div>
+            {% endif %}
             </div>
         {% else %}
             <p class="text-gray-500 py-8 text-center">😕 Aucun livre disponible pour le moment.</p>
