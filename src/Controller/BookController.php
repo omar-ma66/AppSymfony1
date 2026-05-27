@@ -18,12 +18,14 @@ use App\Repository\CategoryRepository;
 use App\Repository\BookRepository;
 use Symfony\Component\CssSelector\Node\MatchingNode;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class BookController extends AbstractController
 {
 
 
 #[Route('livre/{id}/supprimer/confirmer',name:'app_book_delete_confirm',requirements:['id'=>'\d+'],methods:['GET'])]
+#[IsGranted('ROLE_ADMIN')]
 public function confirmDelete(Book $book,Request $request , EntityManagerInterface $em)
 {
             if(!$book)
@@ -71,6 +73,7 @@ public function bookUpdate(Request $request , Book $book ,EntityManagerInterface
 
 
 #[Route('/livre/{id}/supprimer',name:'app_book_delete',requirements:['id'=>'\d+'],methods:['GET','POST'])]
+#[IsGranted('ROLE_ADMIN')]
 public function delete(Book $book , EntityManagerInterface $em ,Request $request)
 {
      if(!$book)
@@ -97,6 +100,7 @@ public function delete(Book $book , EntityManagerInterface $em ,Request $request
 
 
 #[Route('/livre/{id}/modifier',name:'app_book_edit',requirements:['id'=>'\d+'],methods:['GET','POST'])]
+#[IsGranted('ROLE_ADMIN')]
 public function edit(Book $book,Request $request,EntityManagerInterface $em):Response
 {
 
@@ -150,6 +154,7 @@ public function edit(Book $book,Request $request,EntityManagerInterface $em):Res
 
 
     #[Route('/livres/nouveau',name:'app_book_new',methods:['GET','POST'])]
+    #[IsGranted('ROLE_ADMIN')]
      public function new (Request $request ,EntityManagerInterface $em)
      {
         $book = new Book();
@@ -233,6 +238,7 @@ public function edit(Book $book,Request $request,EntityManagerInterface $em):Res
     }
 
     #[Route('/livre/ajouter', name: 'app_add_book')]
+    #[IsGranted('ROLE_ADMIN')]
     public function addBook(EntityManagerInterface $em, CategoryRepository $cr): Response
     {
         return new Response('Livre deja enregistrés');

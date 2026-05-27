@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class AuteurController extends AbstractController
 {
@@ -26,6 +26,7 @@ final class AuteurController extends AbstractController
 // ###############################################################################################################################
 
     #[Route('/auteur/nouveau', name: 'app_auteur_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $auteur = new Auteur();
@@ -58,6 +59,7 @@ final class AuteurController extends AbstractController
 // ###############################################################################################################################
 
     #[Route('/auteur/{id}/modifier', name: 'app_auteur_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AuteurType::class, $auteur);
@@ -78,6 +80,7 @@ $this->addFlash('succes','l\'auteur '.$auteur->getFirstName() . $auteur->getLast
     }
 // ###############################################################################################################################
     #[Route('/auteur/{id}/supprime', name: 'app_auteur_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$auteur->getId(), $request->getPayload()->getString('_token'))) {

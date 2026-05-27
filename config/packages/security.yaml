@@ -23,6 +23,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                # default_target_path: app_book_index j'ai ajouter cette ligne
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -37,7 +38,13 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/profile, roles: ROLE_USER }      
+        # - { path: ^/livres/nouveau, roles: ROLE_ADMIN }
+        # - { path: ^/livre/\d+/modifier, roles: ROLE_ADMIN }
+        # - { path: ^/livre/\d+/supprimer, roles: ROLE_ADMIN }
+        # - { path: ^/auteur/nouveau, roles: ROLE_ADMIN }
+        # - { path: ^/auteur/\d+/modifier, roles: ROLE_ADMIN }
+        # - { path: ^/auteur/\d+/supprimer, roles: ROLE_ADMIN }
 
 when@test:
     security:
