@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AuteurController extends AbstractController
 {
+// ###############################################################################################################################
+
     #[Route('/auteur', name: 'app_auteur_index', methods: ['GET'])]
     public function index(AuteurRepository $auteurRepository): Response
     {
@@ -21,6 +23,7 @@ final class AuteurController extends AbstractController
             'auteurs' => $auteurRepository->findAll(),
         ]);
     }
+// ###############################################################################################################################
 
     #[Route('/auteur/nouveau', name: 'app_auteur_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -43,6 +46,7 @@ final class AuteurController extends AbstractController
             'form' => $form,
         ]);
     }
+// ###############################################################################################################################
 
     #[Route('/auteur/{id}', name: 'app_auteur_show', methods: ['GET'])]
     public function show(Auteur $auteur): Response
@@ -51,6 +55,7 @@ final class AuteurController extends AbstractController
             'auteur' => $auteur,
         ]);
     }
+// ###############################################################################################################################
 
     #[Route('/auteur/{id}/modifier', name: 'app_auteur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
@@ -71,7 +76,7 @@ $this->addFlash('succes','l\'auteur '.$auteur->getFirstName() . $auteur->getLast
             'form' => $form,
         ]);
     }
-
+// ###############################################################################################################################
     #[Route('/auteur/{id}/supprime', name: 'app_auteur_delete', methods: ['POST'])]
     public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
     {
@@ -85,3 +90,4 @@ $this->addFlash('succes','l\'auteur '.$auteur->getFirstName() . $auteur->getLast
         return $this->redirectToRoute('app_auteur_index', [], Response::HTTP_SEE_OTHER);
     }
 }
+// ###############################################################################################################################
