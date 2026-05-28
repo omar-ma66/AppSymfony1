@@ -72,4 +72,15 @@ class Category
 
         return $this;
     }
+    // src/Entity/Auteur.php
+
+public function __toString(): string
+{
+    // Vous choisissez ici ce que vous voulez afficher par défaut.
+    // Par exemple, le nom de l'auteur :
+    return $this->name; 
+    
+    // Ou si vous avez un prénom et un nom :
+    // return $this->prenom . ' ' . $this->nom;
+}
 }

@@ -68,6 +68,19 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-tachometer-alt');
+
+    yield MenuItem::section('Catalogue');
+    yield MenuItem::linkTo(BookCrudController::class, 'Livres', 'fa fa-book');
+    yield MenuItem::linkTo(AuteurCrudController::class, 'Auteurs', 'fa fa-pen-nib');
+    yield MenuItem::linkTo(CategoryCrudController::class, 'Catégories', 'fa fa-tag');
+
+    yield MenuItem::section('Utilisateurs & Emprunts');
+    yield MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fa fa-users');
+    yield MenuItem::linkTo(BorrowingCrudController::class, 'Emprunts', 'fa fa-book-reader');
+
+    yield MenuItem::section('Navigation');
+    yield MenuItem::linkToRoute('Retour au site', 'fa fa-arrow-left', 'app_home');
         // yield MenuItem::linkTo(SomeCrudController::class, 'The Label', 'fas fa-list');
     }
 }
