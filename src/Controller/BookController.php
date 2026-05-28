@@ -237,11 +237,14 @@ public function edit(Book $book,Request $request,EntityManagerInterface $em):Res
         return  new Response("vous avez choisi le livre [ $id ] de  la categorie : [$category ] : ");
     }
 
+    
     #[Route('/livre/ajouter', name: 'app_add_book')]
+    /*
     #[IsGranted('ROLE_ADMIN')]
+    */
     public function addBook(EntityManagerInterface $em, CategoryRepository $cr): Response
     {
-        return new Response('Livre deja enregistrés');
+       return new Response('Livre deja enregistrés');
 
         $classique = $cr->find(3);
         $sf = $cr->find(1);
@@ -272,7 +275,7 @@ public function edit(Book $book,Request $request,EntityManagerInterface $em):Res
         $fahr->addCategory($dy);
 
 
-        dd($fahr, $petitPrince, $ray, $antoine);
+        // dd($fahr, $petitPrince, $ray, $antoine);
 
         $em->persist($antoine);
         $em->persist($petitPrince);
@@ -282,7 +285,7 @@ public function edit(Book $book,Request $request,EntityManagerInterface $em):Res
 
         $em->flush();
 
-        return new Response("les deux livres sont enregistrés");
+        return new Response("les livres sont enregistrés");
     }
 /******************************************************************************************************************************************** */
 /******************************************************************************************************************************************** */

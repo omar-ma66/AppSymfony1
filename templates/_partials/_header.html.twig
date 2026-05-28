@@ -49,6 +49,11 @@
 
             {# Dans le nav de _header.html.twig, ajoute à la fin : #}
 {% if app.user %}
+ <a href="{{ path('app_borrowing_my') }}"
+       class="hover:text-indigo-200 transition {% if app.current_route starts with 'app_borrowing' %}underline{% endif %}">
+        📚 Mes emprunts
+    </a>
+
     <span class="text-indigo-200 text-sm">
         👤 {{ app.user.firstName ?? app.user.email }} 
     </span>
