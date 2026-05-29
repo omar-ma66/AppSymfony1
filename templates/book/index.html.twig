@@ -3,6 +3,8 @@
 {% block title %}Bibliotech — Nos livres{% endblock %}
 
 {% block body %}
+
+
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-800">📚 Nos livres</h1>
         <a href="{{ path('app_book_new') }}"
@@ -24,7 +26,7 @@
     {% endif %}
 
     {# Recherche #}
-    <form method="GET" action="{{ path('app_book_index') }}" class="flex gap-2 mb-6">
+    <form method="GET" action="{{ path('app_book_index') }}" class="flex gap-2 mb-6"   >
         <input type="text" name="q"
                value="{{ search|default('') }}"
                placeholder="Rechercher un livre…"
@@ -69,8 +71,11 @@
                 <div class="flex items-center gap-3 text-sm">
                     <a href="{{ path('app_book_edit', {id: book.id}) }}"
                        class="text-indigo-600 hover:underline">✏️ Modifier</a>
-                    <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}"
-                          onsubmit="return confirm('Supprimer « {{ book.title }} » ?')">
+                    <form method="POST" action="{{ path('app_book_delete', {id: book.id}) }}" 
+                     data-controller="confirm" 
+                     data-confirm-message-value="Supprimer « {{ book.title }} » ?"  
+                     data-action="submit->confirm#confirm">
+                          {# onsubmit="return confirm('Supprimer « {{ book.title }} » ?')"> #}
                         <input type="hidden" name="_token" value="{{ csrf_token('delete-book-' ~ book.id) }}">
                         <button type="submit" class="text-red-500 hover:underline cursor-pointer">🗑️</button>
                     </form>

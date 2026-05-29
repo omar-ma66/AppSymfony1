@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Form\Field\AuteurAutocompleteField;
 
 class BookType extends AbstractType
 {
@@ -40,8 +41,17 @@ class BookType extends AbstractType
                  'label'    => 'ISBN',
                 'required' => false,
                 'attr'     => ['placeholder' => 'Ex: 9782070360024'],
-])
-            ->add('author', EntityType::class, [
+                                        ])
+            // ->add('author', EntityType::class, [
+            //     'class' => Auteur::class,
+            //     'choice_label' => function (Auteur $author):string
+            //     {
+            //         return $author->getFirstName().' '.$author->getLastName() ;
+            //     },
+            //     'label' => 'Auteur',
+            //     'placeholder' => '--- Choisir un Auteur --- '
+            // ])
+                 ->add('author',AuteurAutocompleteField::class, [
                 'class' => Auteur::class,
                 'choice_label' => function (Auteur $author):string
                 {
@@ -50,7 +60,6 @@ class BookType extends AbstractType
                 'label' => 'Auteur',
                 'placeholder' => '--- Choisir un Auteur --- '
             ])
-
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => function(Category $category):string{

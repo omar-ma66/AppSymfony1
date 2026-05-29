@@ -52,6 +52,12 @@
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
         {% endblock %}
+
+            {% block javascripts %}
+                {% block importmap %}
+                        {{ importmap('app') }}
+                {%  endblock %}
+        {% endblock %}
     </head>
     <body class="flex flex-col min-h-screen text-gray-800">
 
@@ -71,11 +77,11 @@
                 {% endfor %}
             {% endfor %}
 
-            {% block body %}{% endblock %}
+            {% block body %}  {% endblock %}
         </main>
 
         {% include '_partials/_footer.html.twig' %}
 
-        {% block javascripts %}{% endblock %}
+           
     </body>
 </html> 
